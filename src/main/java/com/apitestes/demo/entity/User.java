@@ -1,4 +1,4 @@
-package com.apitestes.demo.domain;
+package com.apitestes.demo.entity;
 
 import java.util.UUID;
 

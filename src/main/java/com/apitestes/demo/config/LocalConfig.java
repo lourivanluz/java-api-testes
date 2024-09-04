@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.apitestes.demo.domain.User;
-import com.apitestes.demo.domain.repositories.UserRepository;
+import com.apitestes.demo.entity.User;
+import com.apitestes.demo.repositories.UserRepository;
 
 @Configuration
 @Profile("local")
@@ -25,8 +25,6 @@ public class LocalConfig {
             User user2 = new User(null, "adm", "adm@gmail.com", "123");
 
             userRepository.saveAll(List.of(user1, user2));
-
-            System.out.println("Users have been inserted into the database.");
         };
     }
 }
