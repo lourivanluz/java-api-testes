@@ -9,10 +9,8 @@ import com.apitestes.demo.entity.User;
 import com.apitestes.demo.services.UserService;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
