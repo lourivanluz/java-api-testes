@@ -7,7 +7,7 @@ import com.apitestes.demo.dto.UserDto;
 import com.apitestes.demo.entity.User;
 
 public interface UserService {
-   User findbyid(UUID id);
+   User findById(UUID id);
    List<User> findAllUsers();
    User create(UserDto user);
    User update(UserDto user);

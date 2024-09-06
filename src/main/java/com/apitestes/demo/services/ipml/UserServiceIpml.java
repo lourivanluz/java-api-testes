@@ -1,6 +1,5 @@
 package com.apitestes.demo.services.ipml;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,9 +27,9 @@ public class UserServiceIpml implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User findbyid(UUID id) {
+    public User findById(UUID id) {
         Optional<User> user =  userRepository.findById(id);
-        return user.orElseThrow(()-> new ObjectNotFoundException("Usuario não encontrado"));
+        return user.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado"));
     }
 
     @Override
@@ -41,15 +40,14 @@ public class UserServiceIpml implements UserService {
 
     @Override
     public User create(UserDto user) {
-        validEmail(user);
+        validUser(user);
         return userRepository.save(mapper.map(user, User.class));
 
     }
 
     @Override
     public User update(UserDto user) {
-        validEmail(user);
-        User userFiltred = findbyid(user.getId());
+        User userFiltred = validUser(user);
 
         TypeMap<UserDto, User> propertyMapper = mapper.getTypeMap(UserDto.class, User.class);
 
@@ -63,30 +61,25 @@ public class UserServiceIpml implements UserService {
 
     @Override
     public void delete(UUID id) {
-        findbyid(id);
+        findById(id);
         userRepository.deleteById(id);
     }
 
-    public boolean hasEmail(UserDto user) {
-        Class<?> clazz = user.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-    
-        for (Field field : fields) {
-            if (field.getName().equals("email")) {
-                return true;
-            }
+    public User validUser(UserDto user){
+        
+        Optional<User> resultEmail = userRepository.findByEmail(user.getEmail());
+        if(resultEmail.isPresent() && !resultEmail.get().getId().equals(user.getId())){  
+            throw new DataIntegratyViolationException("Email já cadastrado");
         }
-        return false; 
-    }
 
-    public void validEmail(UserDto user){
-
-        if (hasEmail(user)){
-            Optional<User> result = userRepository.findByEmail(user.getEmail());
-            if(result.isPresent() && !result.get().getId().equals(user.getId())){
-                throw new DataIntegratyViolationException("Email já cadastrado");
+        if(user.getId()!=null){
+            Optional<User> resultId =  userRepository.findById(user.getId());
+            if(resultId.isEmpty()){
+                throw new ObjectNotFoundException("Objeto não encontrado");
             }
+            return resultId.get();
+        }else{
+            return mapper.map(user, User.class);
         }
     }
-
 }

@@ -3,11 +3,13 @@ package com.apitestes.demo;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 @SpringBootTest
 class DemoApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void main() {
+		DemoApplication.main(new String[] {});
 	}
 
 }

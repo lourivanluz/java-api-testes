@@ -39,7 +39,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
-        User user = userservice.findbyid(id);
+        User user = userservice.findById(id);
         return ResponseEntity.ok().body(mapper.map(user, UserDto.class));
     }
 
@@ -56,7 +56,7 @@ public class UserController {
         User userCreate = userservice.create(user);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}").buildAndExpand(user.getId().toString()).toUri();
+        .path("/{id}").buildAndExpand(userCreate.getId().toString()).toUri();
         
         return ResponseEntity.created(uri).body(mapper.map(userCreate,UserDto.class));
     }
