@@ -257,16 +257,7 @@ public class UserServiceIpmlTest {
         mockTypeMap = mock(TypeMap.class);
     }
 
-    void validUserAttributes(User user,User result){
-        assertNotNull(result);
-        assertEquals(User.class, result.getClass());
-        assertEquals(user.getId(), result.getId());
-        assertEquals(user.getName(), result.getName());
-        assertEquals(user.getEmail(), result.getEmail());
-        assertEquals(user.getPassword(), user.getPassword());
-    }
-
-    void validUserDtoAttributes(UserDto user, UserDto result){
+    private void validUserAttributes(User user,User result){
         assertNotNull(result);
         assertEquals(User.class, result.getClass());
         assertEquals(user.getId(), result.getId());

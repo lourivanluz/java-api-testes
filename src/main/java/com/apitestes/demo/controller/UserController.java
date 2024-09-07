@@ -6,6 +6,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.apitestes.demo.dto.UserDto;
 import com.apitestes.demo.entity.User;
+import com.apitestes.demo.exceptions.exceptionsType.DataIntegratyViolationException;
 import com.apitestes.demo.services.UserService;
 
 import java.net.URI;
@@ -38,8 +39,9 @@ public class UserController {
     private UserService userservice;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
-        User user = userservice.findById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
+        isUUID(id);
+        User user = userservice.findById(isUUID(id));
         return ResponseEntity.ok().body(mapper.map(user, UserDto.class));
     }
 
@@ -62,16 +64,25 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable UUID id, @RequestBody UserDto user) {
-        user.setId(id);
+    public ResponseEntity<UserDto> update(@PathVariable String id, @RequestBody UserDto user) {
+
+        user.setId(isUUID(id));
         User userUpdate = userservice.update(user);
         return ResponseEntity.ok().body(mapper.map(userUpdate,UserDto.class));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserDto> delete(@PathVariable UUID id){
-        userservice.delete(id);
+    public ResponseEntity<UserDto> delete(@PathVariable String id){
+        userservice.delete(isUUID(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    UUID isUUID(String id){
+        try {
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            throw new DataIntegratyViolationException("UUID não encontrado");
+        }
     }
     
     
